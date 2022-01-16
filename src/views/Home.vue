@@ -46,7 +46,7 @@ export default class Home extends Vue {
   async created(): Promise<void> {
     axios
       .get(
-        `https://api.nasa.gov/planetary/apod?api_key=${process.env.VUE_APP_NASA_API_KEY}&count=20`
+        `https://api.nasa.gov/planetary/apod?api_key=${process.env.VUE_APP_NASA_API_KEY}&count=42`
       )
       .then((response) => {
         this.nasaResponseData = response.data;
