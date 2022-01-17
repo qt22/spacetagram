@@ -64,6 +64,7 @@ export default class Home extends Vue {
   }
 
   toggleLikeButton(id: number): void {
+    // https://vuejs.org/v2/guide/reactivity.html#For-Arrays
     this.nasaResponseData[id]?.likeIcon === "mdi-heart-outline"
       ? this.nasaResponseData.splice(id, 1, {
           ...this.nasaResponseData[id],
@@ -83,8 +84,6 @@ export default class Home extends Vue {
           ...this.nasaResponseData[id],
           likeIconColor: "grey",
         });
-
-    console.log(id);
   }
 }
 </script>
