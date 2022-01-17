@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-row>
-      <v-col cols="12" v-for="image in nasaResponseData" :key="image.title">
+      <v-col cols="12" v-for="image in nasaResponseData" :key="image.id">
         <v-card class="mx-auto" max-width="800">
           <v-img
             :src="image.hdurl ? image.hdurl : image.url"
@@ -13,8 +13,12 @@
           <div class="d-flex justify-space-between align-center">
             <v-card-title>{{ image.title }}</v-card-title>
             <v-card-actions>
-              <v-btn :color="likeButtonColor" icon @click="toggleLikeButton()">
-                <v-icon>{{ likeIcon }}</v-icon>
+              <v-btn
+                :color="image.likeIconColor"
+                icon
+                @click="toggleLikeButton(image.id)"
+              >
+                <v-icon>{{ image.likeIcon }}</v-icon>
               </v-btn>
             </v-card-actions>
           </div>
@@ -40,8 +44,6 @@ import axios from "axios";
 @Component
 export default class Home extends Vue {
   nasaResponseData: INasaApiData[] = [];
-  likeIcon: string = "mdi-heart-outline";
-  likeButtonColor = "grey";
 
   async created(): Promise<void> {
     axios
@@ -50,17 +52,38 @@ export default class Home extends Vue {
       )
       .then((response) => {
         this.nasaResponseData = response.data;
-        console.log(this.nasaResponseData[0].url);
+        for (let i: number = 0; i < response.data.length; i++) {
+          this.nasaResponseData[i].id = i;
+          this.nasaResponseData[i].likeIcon = "mdi-heart-outline";
+          this.nasaResponseData[i].likeIconColor = "grey";
+        }
       })
       .catch((error) => {
         console.log(error);
       });
   }
 
-  toggleLikeButton(): void {
-    this.likeButtonColor = this.likeButtonColor === "grey" ? "red" : "grey";
-    this.likeIcon =
-      this.likeIcon === "mdi-heart-outline" ? "mdi-heart" : "mdi-heart-outline";
+  toggleLikeButton(id: number): void {
+    // https://vuejs.org/v2/guide/reactivity.html#For-Arrays
+    this.nasaResponseData[id]?.likeIcon === "mdi-heart-outline"
+      ? this.nasaResponseData.splice(id, 1, {
+          ...this.nasaResponseData[id],
+          likeIcon: "mdi-heart",
+        })
+      : this.nasaResponseData.splice(id, 1, {
+          ...this.nasaResponseData[id],
+          likeIcon: "mdi-heart-outline",
+        });
+
+    this.nasaResponseData[id]?.likeIconColor === "grey"
+      ? this.nasaResponseData.splice(id, 1, {
+          ...this.nasaResponseData[id],
+          likeIconColor: "red",
+        })
+      : this.nasaResponseData.splice(id, 1, {
+          ...this.nasaResponseData[id],
+          likeIconColor: "grey",
+        });
   }
 }
 </script>
