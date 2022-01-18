@@ -52,7 +52,13 @@ export default class Home extends Vue {
       )
       .then((response) => {
         this.nasaResponseData = response.data;
-        for (let i: number = 0; i < response.data.length; i++) {
+        for (let i: number = 0; i < this.nasaResponseData.length; i++) {
+          // remove video data types
+          if (this.nasaResponseData[i].media_type === "video") {
+            this.nasaResponseData.splice(i, 1);
+          }
+        }
+        for (let i: number = 0; i < this.nasaResponseData.length; i++) {
           this.nasaResponseData[i].id = i;
           this.nasaResponseData[i].likeIcon = "mdi-heart-outline";
           this.nasaResponseData[i].likeIconColor = "grey";

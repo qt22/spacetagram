@@ -1,5 +1,6 @@
 <template>
   <v-app>
+    <app-header />
     <v-main>
       <router-view />
     </v-main>
@@ -8,12 +9,13 @@
 
 <script lang="ts">
 import Vue from "vue";
+import AppHeader from "@/components/AppHeader.vue";
+import Component from "vue-class-component";
 
-export default Vue.extend({
-  name: "App",
-
-  data: () => ({
-    //
-  }),
-});
+@Component({
+  components: {
+    AppHeader,
+  },
+})
+export default class App extends Vue {}
 </script>
